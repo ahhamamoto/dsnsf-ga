@@ -8,7 +8,12 @@
 
 (defn test
   []
-  (average (cast-to-int (read-data "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/data.txt"))))
+  (let [files ["/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-1.txt"
+               "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-2.txt"
+               "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-3.txt"
+               "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-4.txt"]
+        data (get-input files)]
+    (inferior-limit data)))
 
 (load "utils")
 
