@@ -51,3 +51,7 @@
   "returns superior limit from input"
   [data]
   (map #(apply max %) data))
+
+(defn euclidian-distance
+  [value input]
+  (Math/sqrt (apply + (map #(* % %) (map #(- value %) input)))))
