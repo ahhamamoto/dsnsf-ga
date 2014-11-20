@@ -55,3 +55,9 @@
 (defn euclidian-distance
   [value input]
   (Math/sqrt (apply + (map #(* % %) (map #(- value %) input)))))
+
+(defn save-dsnsf-ga
+  [dsnsf filename]
+  (with-open [wtr (io/writer filename)]
+    (doseq [point (map #(:value %) dsnsf)]
+      (.write wtr (str point "\n")))))

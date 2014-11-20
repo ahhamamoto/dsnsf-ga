@@ -81,8 +81,10 @@
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-2.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-3.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-4.txt"]
-        data (get-input files)]
+        data (get-input files)
+        dsnsf (assemble-best-chromosomes
+               (optimize-all data generations population-size))]
     (println "Starting to run Genetic Algorithm")
-    (println (assemble-best-chromosomes
-                       (optimize-all data generations population-size)))
+    (println dsnsf)
+    (save-dsnsf-ga (nth dsnsf 0) "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/dsnsf.txt")
     (println "Done!")))
