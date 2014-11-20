@@ -2,17 +2,53 @@
   (:require [clojure.java.io :as io]))
 
 (defn create-chromosome
-  [inf sup input]
-  (let [value (rand-float inf sup)]
-    {:value value :fitness (euclidian-distance value input)}))
+  "creates a chromosome based on limits and input"
+  ([inf sup input]
+     (let [value (rand-float inf sup)]
+       {:value value :fitness (euclidian-distance value input)}))
+  ([value input]
+     {:value value :fitness (euclidian-distance value input)}))
 
 (defn generate-point-population
+  "generates the population of a single point"
   [size inf sup input]
   (repeatedly size #(create-chromosome inf sup input)))
 
 (defn generate-population
+  "generates the whole population"
   [size inf sup input]
   (map #(generate-point-population size %1 %2 %3) inf sup input))
+
+(defn tournament-selection
+  "selection by tournament"
+  [point-population]
+  (let [chr1 (nth point-population (rand-int (count point-population)))
+        chr2 (nth point-population (rand-int (count point-population)))]
+    (if (> (:fitness chr1) (:fitness chr2))
+      chr1
+      chr2)))
+
+(defn crossover
+  [chr1 chr2 input]
+  (create-chromosome (/ (+ (:value chr1) (:value chr2)) 2) input))
+
+(defn mutate
+  [chr input]
+  (let [value (rand-float 0 1)]
+    (cond
+     (< value 0.05) (create-chromosome (- (:value chr) (* 0.05 (:value chr))) input)
+     (< value 0.10) (create-chromosome (+ (:value chr) (* 0.05 (:value chr))) input)
+     :else chr)))
+
+(defn evolve
+  [point-population input size]
+  (repeatedly size #(mutate (crossover (tournament-selection point-population)
+                                       (tournament-selection point-population)
+                                       input) input)))
+
+(defn optimize
+  [point-population input generations size]
+  (repeatedly generations #(evolve point-population input size)))
 
 (defn test
   []
@@ -21,8 +57,10 @@
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-3.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-4.txt"]
         data (get-input files)
-        inf (inferior-limit data)
-        sup (superior-limit data)]))
-
+        initial-population (generate-population 20
+                                                (inferior-limit data)
+                                                (superior-limit data)
+                                                data)]
+    (optimize (nth initial-population 0) (nth data 0) 20 20)))
 (load "utils")
 
