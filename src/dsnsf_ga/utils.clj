@@ -22,15 +22,15 @@
    (with-open [rdr (io/reader file)]
      (doall (line-seq rdr)))))
 
-(defn read-all-data
-  "reads and preprocesses all input files"
-  [files]
-  (map #(pre-process (read-data %)) files))
-
 (defn pre-process
   "gets the average of partitions"
   [data]
   (map #(average %) (partition 300 data)))
+
+(defn read-all-data
+  "reads and preprocesses all input files"
+  [files]
+  (map #(pre-process (read-data %)) files))
 
 (defn transpose
   "transposes matrix"
