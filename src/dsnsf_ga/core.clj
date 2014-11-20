@@ -1,5 +1,8 @@
 (ns dsnsf-ga.core
+  (:gen-class)
   (:require [clojure.java.io :as io]))
+
+(load "utils")
 
 (defn create-chromosome
   "creates a chromosome based on limits and input"
@@ -29,10 +32,12 @@
       chr2)))
 
 (defn crossover
+  "crossover between two chromosomes"
   [chr1 chr2 input]
   (create-chromosome (/ (+ (:value chr1) (:value chr2)) 2) input))
 
 (defn mutate
+  "mutates a single chromosome"
   [chr input]
   (let [value (rand-float 0 1)]
     (cond
@@ -41,26 +46,33 @@
      :else chr)))
 
 (defn evolve
+  "evolves a generation"
   [point-population input size]
   (repeatedly size #(mutate (crossover (tournament-selection point-population)
                                        (tournament-selection point-population)
                                        input) input)))
 
 (defn optimize
+  "optmizes a point"
   [point-population input generations size]
   (repeatedly generations #(evolve point-population input size)))
 
-(defn test
+(defn optimize-all
+  [data generations size]
+  (map #(optimize %1 %2 generations size)
+       (generate-population size
+                            (inferior-limit data)
+                            (superior-limit data)
+                            data)
+       data))
+
+(defn -main
   []
   (let [files ["/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-1.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-2.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-3.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-4.txt"]
-        data (get-input files)
-        initial-population (generate-population 20
-                                                (inferior-limit data)
-                                                (superior-limit data)
-                                                data)]
-    (optimize (nth initial-population 0) (nth data 0) 20 20)))
-(load "utils")
-
+        data (get-input files)]
+    (println "Starting to run Genetic Algorithm")
+    (println (optimize-all data 20 10))
+    (println "Done!")))
