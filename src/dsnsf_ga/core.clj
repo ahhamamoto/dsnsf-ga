@@ -66,13 +66,23 @@
                             data)
        data))
 
+(defn get-best-chromosome
+  [point-population]
+  (nth (sort-by :value point-population) 0))
+
+(defn assemble-best-chromosomes
+  [population]
+  (map #(get-best-chromosome %) population))
+
 (defn -main
-  []
+  [& {:keys [population-size generations]
+      :or {population-size 20 generations 50}}]
   (let [files ["/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-1.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-2.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-3.txt"
                "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-4.txt"]
         data (get-input files)]
     (println "Starting to run Genetic Algorithm")
-    (println (optimize-all data 20 10))
+    (println (assemble-best-chromosomes
+                       (optimize-all data generations population-size)))
     (println "Done!")))
