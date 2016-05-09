@@ -24,8 +24,8 @@
 
 (defn pre-process
   "gets the average of partitions"
-  [data]
-  (map #(average %) (partition 300 data)))
+  [data & {:keys [time-window] :or {time-window 300}}]
+  (map #(average %) (partition time-window data)))
 
 (defn read-all-data
   "reads and preprocesses all input files"
