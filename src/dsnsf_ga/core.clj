@@ -74,7 +74,7 @@
   [population]
   (map #(get-best-chromosome %) population))
 
-(defn -main
+(defn run-dsnsf-ga
   [input-files save-file & {:keys [population-size generations]
                   :or {population-size 20 generations 50}}]
   (let [data (get-input input-files)
@@ -87,11 +87,11 @@
                    save-file)
     (println "Done!")))
 
-(defn test-dsnsf-ga
+(defn -main
   []
   (let [files ["/home/anderson/git/github/dsnsf-ga/data/bits-1.txt"
                "/home/anderson/git/github/dsnsf-ga/data/bits-2.txt"
                "/home/anderson/git/github/dsnsf-ga/data/bits-3.txt"
                "/home/anderson/git/github/dsnsf-ga/data/bits-4.txt"]
         save-file "/home/anderson/git/github/dsnsf-ga/data/dsnsf.txt"]
-    (-main files save-file)))
+    (run-dsnsf-ga files save-file)))
