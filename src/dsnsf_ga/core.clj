@@ -75,16 +75,23 @@
   (map #(get-best-chromosome %) population))
 
 (defn -main
-  [& {:keys [population-size generations]
-      :or {population-size 20 generations 50}}]
-  (let [files ["/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-1.txt"
-               "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-2.txt"
-               "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-3.txt"
-               "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/bits-4.txt"]
-        data (get-input files)
+  [input-files save-file & {:keys [population-size generations]
+                  :or {population-size 20 generations 50}}]
+  (let [data (get-input input-files)
         dsnsf (assemble-best-chromosomes
                (optimize-all data generations population-size))]
     (println "Starting to run Genetic Algorithm")
-    (println dsnsf)
-    (save-dsnsf-ga (nth dsnsf 0) "/Users/manoweng/Documents/Code/github/dsnsf-ga/data/dsnsf.txt")
+    ;; (println dsnsf)
+    ;; (println (assemble-best-chromosomes dsnsf))
+    (save-dsnsf-ga (assemble-best-chromosomes dsnsf)
+                   save-file)
     (println "Done!")))
+
+(defn test-dsnsf-ga
+  []
+  (let [files ["/home/anderson/git/github/dsnsf-ga/data/bits-1.txt"
+               "/home/anderson/git/github/dsnsf-ga/data/bits-2.txt"
+               "/home/anderson/git/github/dsnsf-ga/data/bits-3.txt"
+               "/home/anderson/git/github/dsnsf-ga/data/bits-4.txt"]
+        save-file "/home/anderson/git/github/dsnsf-ga/data/dsnsf.txt"]
+    (-main files save-file)))
