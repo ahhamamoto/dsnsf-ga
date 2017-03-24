@@ -11,7 +11,7 @@
   (+ inf (rand (- sup inf))))
 
 (defn cast-to-float
-  "casts all elements in list to interger"
+  "casts all elements in list to integer"
   [coll]
   (map #(Float/parseFloat %) coll))
 
@@ -53,10 +53,12 @@
   (map #(apply max %) data))
 
 (defn euclidian-distance
+  "calculates the euclidian distance"
   [value input]
   (Math/sqrt (apply + (map #(* % %) (map #(- value %) input)))))
 
 (defn save-dsnsf-ga
+  "saves the dsnsf generated into a file"
   [dsnsf filename]
   (with-open [wtr (io/writer filename)]
     (doseq [point (map #(:value %) dsnsf)]
